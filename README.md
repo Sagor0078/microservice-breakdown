@@ -1,2 +1,4 @@
-# build-own-shell
+# AI Chat Log Summarizer API
+
+
 
