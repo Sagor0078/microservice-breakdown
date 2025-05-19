@@ -85,5 +85,10 @@ Summary:
 
 ## fastapi cli app 
 
+run the app: 
+```bash
+uvicorn main:app --reload
+```
+
 [![Directory docs](img/api.png)](https://github.com/Sagor0078/ai-chat-log-summarizer)
 [![Directory docs](img/api2.png)](https://github.com/Sagor0078/ai-chat-log-summarizer)
