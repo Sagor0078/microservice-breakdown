@@ -32,7 +32,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        poetry install --no-interaction --no-ansi
+        poetry install --no-root 
 
     - name: Lint with Ruff
       run: |
