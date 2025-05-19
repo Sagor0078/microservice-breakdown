@@ -8,6 +8,7 @@ import shutil
 
 app = FastAPI(title="AI Chat Log Summarizer API")
 
+
 @app.post("/summarize", response_class=PlainTextResponse)
 async def summarize_chat(file: UploadFile = File(...)):
     """

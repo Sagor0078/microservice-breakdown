@@ -47,9 +47,9 @@ pip install -r requirements.txt
 This project uses NLTK stopwords. To download them:
 ```bash
 python3.11
-> import nltk
-> nltk.download('stopwords')
-> exit()
+>> import nltk
+>> nltk.download('stopwords')
+>> exit()
 ```
 
 ## Running Tests

@@ -1,6 +1,6 @@
-import pytest
 import textwrap
 from src.parser import parse_chat_log
+
 
 def test_parse_chat_log(tmp_path):
     chat_content = textwrap.dedent("""
