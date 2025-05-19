@@ -30,9 +30,9 @@ jobs:
       run: |
         poetry config virtualenvs.create false
 
-    - name: Install dependencies
+    - name: Lock and Install dependencies
       run: |
-        poetry lock --no-update
+        poetry lock
         poetry install --no-root
 
     - name: Download NLTK data
