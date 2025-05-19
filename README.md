@@ -38,9 +38,8 @@ ai-chat-log-summarizer/
 ```bash
 git clone https://github.com/Sagor0078/ai-chat-log-summarizer.git
 cd ai-chat-log-summarizer
-python3.11 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+poetry init
+poetry install --no-root   
 ```
 
 ##  NLTK Setup
@@ -87,7 +86,7 @@ Summary:
 
 run the app: 
 ```bash
-uvicorn main:app --reload
+poetry run uvicorn main:app --reload
 ```
 
 [![Directory docs](img/api.png)](https://github.com/Sagor0078/ai-chat-log-summarizer)

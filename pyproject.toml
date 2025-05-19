@@ -1,0 +1,26 @@
+[project]
+name = "ai-chat-log-summarizer"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "MD Sagor",email = "musagor78@example.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = "3.11.12"
+dependencies = [
+    "fastapi (>=0.115.12,<0.116.0)",
+    "uvicorn (>=0.34.2,<0.35.0)",
+    "nltk (>=3.9.1,<4.0.0)",
+    "python-multipart (>=0.0.20,<0.0.21)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+ruff = "^0.11.10"
+

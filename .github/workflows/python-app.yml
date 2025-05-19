@@ -1,4 +1,4 @@
-name: Python application
+name: Python Poetry Application
 
 on:
   push:
@@ -11,28 +11,33 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python 3.11
+    - name: Set up Python 3.11.12
       uses: actions/setup-python@v3
       with:
-        python-version: "3.11"
+        python-version: "3.11.12"
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+    - name: Configure Poetry
+      run: |
+        poetry config virtualenvs.create false
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install ruff pytest
-        if [ -f requirements.txt ]; then grep -v "apturl" requirements.txt | pip install -r /dev/stdin; fi
+        poetry install --no-interaction --no-ansi
 
     - name: Lint with Ruff
       run: |
-        # Check for linting issues
-        ruff check . --output-format=github
+        poetry run ruff check . --output-format=github
 
-    - name: Test with pytest
+    - name: Run Tests
       run: |
-        pytest
+        poetry run pytest
