@@ -16,6 +16,8 @@ eggs/
 .eggs/
 env/
 .env/
+venv/
+.venv
 lib/
 lib64/
 parts/
