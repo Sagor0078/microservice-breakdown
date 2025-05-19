@@ -32,7 +32,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        poetry install --no-root 
+        poetry lock --no-update
+        poetry install --no-root
+
+    - name: Download NLTK data
+      run: |
+        poetry run python -m nltk.downloader stopwords
 
     - name: Lint with Ruff
       run: |
