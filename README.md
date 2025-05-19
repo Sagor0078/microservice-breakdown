@@ -10,7 +10,14 @@ This project parses plain text chat logs between a user and an AI, analyzes the 
 - Count total messages, user messages, AI messages
 - Extract top keywords (excluding stopwords)
 - Generate human-readable summaries
-
+- Analyze AI chat logs from `.txt` files
+- Extract:
+  - Number of messages by user and AI
+  - Most frequently used keywords
+- FastAPI-powered REST API
+- Tested with Pytest
+- Linted using Ruff
+- Poetry-managed environment
 ---
 
 ## Project Structure
@@ -38,24 +45,43 @@ ai-chat-log-summarizer/
 ```bash
 git clone https://github.com/Sagor0078/ai-chat-log-summarizer.git
 cd ai-chat-log-summarizer
-poetry init
-poetry install --no-root   
+```
+## Install Poetry
+- If Poetry is not already installed:
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+- Add it to your shell path (if not already added):
+```bash
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
-##  NLTK Setup
-This project uses NLTK stopwords. To download them:
+- Use Python 3.11
+Ensure you have Python 3.11 installed and configure it:
 ```bash
-python3.11
->> import nltk
->> nltk.download('stopwords')
->> exit()
+poetry env use python3.11
+```
+
+## Install Dependencies
+```bash
+poetry install --no-root
+```
+
+## Download Required NLTK Resources
+```bash
+poetry run python -m nltk.downloader stopwords
 ```
 
 ## Running Tests
-```bash 
-pytest tests/
+```bash
+poetry run pytest
 ```
 [![Directory docs](img/test.png)](https://github.com/Sagor0078/ai-chat-log-summarizer)
+
+## Linting
+```bash
+poetry run ruff check .
+```
 
 
 ## Example Chat Log Format
