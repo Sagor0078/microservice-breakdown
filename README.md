@@ -123,4 +123,11 @@ The platform is designed as a collection of **loosely coupled microservices**, e
 ---
 
 > [!NOTE]
-> This project is for **educational purposes** build small, focused projects for each new concept before integrating them into main project. I will breakdown each of concept.
+> Educational Goals:
+> This project is ideal for learning:
+> Clean microservice architecture with async pipelines
+> Secure, scalable FastAPI APIs
+> Production-ready Celery pipelines
+> Vector search + RAG in a real-world system
+> Observability with OpenTelemetry, Prometheus, and Grafana
+> Azure-native deployment and IaC with Terraform
