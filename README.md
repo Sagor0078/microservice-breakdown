@@ -1,119 +1,133 @@
-# AI Chat Log Summarizer
 
-This project parses plain text chat logs between a user and an AI, analyzes the conversation, and generates a readable summary. It uses Python3.11, fastapi, `nltk` for natural language processing, and `pytest` for testing.
+# Legal Document Intelligence Platform (Microservices Architecture)
 
----
-
-## Features
-
-- Parse structured chat logs (User/AI format)
-- Count total messages, user messages, AI messages
-- Extract top keywords (excluding stopwords)
-- Generate human-readable summaries
-- Analyze AI chat logs from `.txt` files
-- Extract:
-  - Number of messages by user and AI
-  - Most frequently used keywords
-- FastAPI-powered REST API
-- Tested with Pytest
-- Linted using Ruff
-- Poetry-managed environment
----
-
-## Project Structure
-
-```md
-ai-chat-log-summarizer/
-├── main.py
-├── src/
-│ ├── parser.py # Parses raw chat logs
-│ ├── analyzer.py # Analyzes chat content
-│ └── summarizer.py # Generates summary from analysis
-├── tests/
-│ ├── parser_test.py
-│ ├── analyzer_test.py
-│ └── summarizer_test.py
-├── requirements.txt
-└── README.md
-```
-
+This repository contains an educational microservices-based architecture for a **Legal Document Intelligence Platform**, built using **FastAPI**, **Celery**, **GraphQL**, **PostgreSQL**, **RabbitMQ**, and **Kubernetes on Azure**. It demonstrates how to ingest, process, analyze, and generate insights from legal documents at scale.
 
 ---
 
-## Installation
+## Project Overview
 
-```bash
-git clone https://github.com/Sagor0078/ai-chat-log-summarizer.git
-cd ai-chat-log-summarizer
-```
-## Install Poetry
-- If Poetry is not already installed:
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
-```
-- Add it to your shell path (if not already added):
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-```
+The platform is designed as a collection of **loosely coupled microservices**, each responsible for a **distinct business capability**. It follows modern best practices in distributed system design, observability, DevOps, and AI integration.
 
-- Use Python 3.11
-Ensure you have Python 3.11 installed and configure it:
-```bash
-poetry env use python3.11
-```
+---
 
-## Install Dependencies
-```bash
-poetry install --no-root
-```
+## Microservices Breakdown
 
-## Download Required NLTK Resources
-```bash
-poetry run python -m nltk.downloader stopwords
-```
+### 1. Auth & User Management Service
 
-## Running Tests
-```bash
-poetry run pytest
-```
-[![Directory docs](img/test.png)](https://github.com/Sagor0078/ai-chat-log-summarizer)
+- **Tech:** FastAPI + PostgreSQL + JWT + Bcrypt
+- **Features:**
+  - User registration & login
+  - Role-Based Access Control (RBAC)
+  - JWT-based authentication
+  - Secure password hashing (Bcrypt)
+  - Rate limiting & secure cookie handling
+  - Prometheus metrics + structured logs
 
-## Linting
-```bash
-poetry run ruff check .
-```
+---
 
+### 2. Document Ingestion & Metadata Service
 
-## Example Chat Log Format
+- **Tech:** FastAPI + PostgreSQL + Azure Blob Storage + Redis/RabbitMQ + Celery
+- **Endpoints:**
+  - `POST /documents/upload`
+  - `GET /documents/{doc_id}`
+- **Features:**
+  - Upload large legal documents
+  - Extract and store metadata (filename, size, upload date)
+  - Store files in Azure Blob Storage
+  - Trigger async processing pipeline via message queue
 
-```txt
-User: Hello
-AI: Hi there! How can I help you?
-User: What is the capital of France?
-AI: Paris is the capital of France.
-```
+---
 
-## Example Summary Output
-```txt
-Summary:
-- The conversation had 4 messages (2 complete exchanges).
-- The user sent 2 messages, and the AI responded with 2 messages.
-- The conversation was mainly about paris, capital.
-- Most common keywords: paris, capital, france.
-```
+### 3. Document Processing Worker (Celery)
 
-## How It Works
+- **Tech:** Celery + Azure Blob Storage + Vector DB (pgvector/Milvus)
+- **Celery Tasks:**
+  - `extract_text_task`: OCR & text extraction
+  - `chunk_document_task`: Chunk into context windows
+  - `generate_embeddings_task`: Call ML model for embeddings
+  - `store_embeddings_task`: Save chunks + vectors
+  - `analyze_compliance_task`: Compliance risk detection via RAG/LLM
+  - `generate_summary_task`: Generate summaries
+  - `notification_task`: Notify users via email/in-app
 
-- Parser: Reads the log and extracts messages
-- Analyzer: Counts messages, extracts keywords
-- Summarizer: Combines everything into a summary
+- **Features:**
+  - Scalable worker pool (Kubernetes)
+  - Dead-letter queue & retry logic
+  - Fully async, multi-stage processing pipeline
 
-## fastapi cli app 
+---
 
-run the app: 
-```bash
-poetry run uvicorn main:app --reload
-```
+### 4. Reporting & Analytics Service
 
-[![Directory docs](img/api.png)](https://github.com/Sagor0078/ai-chat-log-summarizer)
-[![Directory docs](img/api2.png)](https://github.com/Sagor0078/ai-chat-log-summarizer)
+- **Tech:** FastAPI + PostgreSQL + GraphQL + Kafka (optional)
+- **Endpoints:**
+  - `GET /reports/compliance`
+  - `POST /analytics/trends`
+- **Features:**
+  - Query historical document data
+  - Generate compliance reports
+  - GraphQL for flexible analytics queries
+  - Connects to data warehouse or Kafka stream
+
+---
+
+### 5. Notification Service
+
+- **Tech:** FastAPI + Celery + WebSockets
+- **Features:**
+  - Email notifications (via Celery)
+  - Real-time in-app alerts (WebSocket support)
+  - Triggered internally by other services
+
+---
+
+## Technologies Used(in future)
+
+| Category               | Stack                                                                 |
+|------------------------|-----------------------------------------------------------------------|
+| API Framework          | FastAPI                                                              |
+| Background Tasks       | Celery                                                               |
+| Message Broker         | RabbitMQ                                                    |
+| Database               | PostgreSQL + pgvector                                                |
+| File Storage           | Azure Blob Storage                                                   |
+| ML Integration         | LLM for RAG (e.g., Gemini/OpenAI), custom embedding service          |
+| Real-Time Notifications| WebSockets                                                           |
+| Observability          | OpenTelemetry, Prometheus, Grafana, Tempo, Loki                      |
+| Containerization       | Docker                                                               |
+| Orchestration          | Kubernetes (Azure AKS)                                               |
+| CI/CD                  | GitHub Actions / Azure Pipelines                                     |
+| Security               | JWT, OAuth2, RBAC, HTTPS, secure coding practices                    |
+| IaC                    | Terraform or Bicep for Azure infrastructure                          |
+
+---
+
+## RAG Pipeline Overview (within Worker Service)
+
+1. **Text Extraction** → `extract_text_task`
+2. **Chunking** → `chunk_document_task`
+3. **Embeddings** → `generate_embeddings_task`
+4. **Storage** → `store_embeddings_task`
+5. **Compliance/QA** → `analyze_compliance_task`
+6. **Summarization** → `generate_summary_task`
+
+---
+
+## Testing Strategy
+
+- **Unit Tests:** Core logic (e.g., auth, task functions)
+- **Integration Tests:** API + DB + Blob + Celery
+- **CI:** Enforces >90% test coverage using `pytest`, `coverage.py`, and CI workflows
+
+---
+
+> [!NOTE]
+> Educational Goals:
+> This project is ideal for learning:
+> Clean microservice architecture with async pipelines
+> Secure, scalable FastAPI APIs
+> Production-ready Celery pipelines
+> Vector search + RAG in a real-world system
+> Observability with OpenTelemetry, Prometheus, and Grafana
+> Azure-native deployment and IaC with Terraform
