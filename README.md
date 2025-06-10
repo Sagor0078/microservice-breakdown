@@ -1,10 +1,3 @@
-
-# Legal Document Intelligence Platform (Microservices Architecture)
-
-This repository contains an educational microservices-based architecture for a **Legal Document Intelligence Platform**, built using **FastAPI**, **Celery**, **GraphQL**, **PostgreSQL**, **RabbitMQ**, and **Kubernetes on Azure**. It demonstrates how to ingest, process, analyze, and generate insights from legal documents at scale.
-
----
-
 ## Project Overview
 
 The platform is designed as a collection of **loosely coupled microservices**, each responsible for a **distinct business capability**. It follows modern best practices in distributed system design, observability, DevOps, and AI integration.
